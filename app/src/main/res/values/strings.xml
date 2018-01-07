@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Nanopool Monitor</string>
+    <string name="retry">Retry</string>
+    <string name="unknown_error">Unknown Error</string>
+    <string name="open_link_failed">No applications found to open link</string>
+    <string name="hash_rate">Hash Rate</string>
+    <string name="balance">Balance</string>
+    <string name="address">Address</string>
+    <string name="account">Account</string>
+    <string name="submit">Submit</string>
+    <string name="scan_barcode">Scan Barcode</string>
+</resources>
