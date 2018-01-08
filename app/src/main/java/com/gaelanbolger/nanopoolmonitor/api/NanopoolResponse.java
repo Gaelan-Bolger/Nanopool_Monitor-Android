@@ -1,17 +1,16 @@
-
-package com.gaelanbolger.nanopoolmonitor.vo;
+package com.gaelanbolger.nanopoolmonitor.api;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Balance {
+public class NanopoolResponse<T> {
 
     @SerializedName("status")
     @Expose
     private boolean status;
     @SerializedName("data")
     @Expose
-    private double data;
+    private T data;
     @SerializedName("error")
     @Expose
     private String error;
@@ -24,11 +23,11 @@ public class Balance {
         this.status = status;
     }
 
-    public double getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(double data) {
+    public void setData(T data) {
         this.data = data;
     }
 
@@ -39,5 +38,4 @@ public class Balance {
     public void setError(String error) {
         this.error = error;
     }
-
 }

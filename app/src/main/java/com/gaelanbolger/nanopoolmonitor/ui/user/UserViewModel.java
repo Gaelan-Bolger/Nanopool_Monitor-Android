@@ -7,10 +7,13 @@ import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 
 import com.gaelanbolger.nanopoolmonitor.repository.UserRepository;
+import com.gaelanbolger.nanopoolmonitor.repository.WorkerRepository;
 import com.gaelanbolger.nanopoolmonitor.util.AbsentLiveData;
 import com.gaelanbolger.nanopoolmonitor.vo.Resource;
 import com.gaelanbolger.nanopoolmonitor.vo.User;
+import com.gaelanbolger.nanopoolmonitor.vo.Worker;
 
+import java.util.List;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -20,14 +23,22 @@ public class UserViewModel extends ViewModel {
     private MutableLiveData<String> address = new MutableLiveData<>();
 
     private final LiveData<Resource<User>> user;
+    private final LiveData<List<Worker>> workers;
 
     @Inject
-    public UserViewModel(UserRepository userRepository) {
+    public UserViewModel(UserRepository userRepository, WorkerRepository workerRepository) {
         user = Transformations.switchMap(address, address -> {
             if (address == null) {
                 return AbsentLiveData.create();
             } else {
                 return userRepository.loadUser(address);
+            }
+        });
+        workers = Transformations.switchMap(address, address -> {
+            if (address == null) {
+                return AbsentLiveData.create();
+            } else {
+                return workerRepository.findByAddress(address);
             }
         });
     }
@@ -41,6 +52,10 @@ public class UserViewModel extends ViewModel {
 
     public LiveData<Resource<User>> getUser() {
         return user;
+    }
+
+    public LiveData<List<Worker>> getWorkers() {
+        return workers;
     }
 
     public void retry() {

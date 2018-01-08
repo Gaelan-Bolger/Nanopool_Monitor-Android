@@ -1,27 +1,24 @@
-package com.gaelanbolger.nanopoolmonitor.ui.scan;
+package com.gaelanbolger.nanopoolmonitor.ui.account;
 
 import android.databinding.DataBindingComponent;
 import android.databinding.DataBindingUtil;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.gaelanbolger.nanopoolmonitor.R;
 import com.gaelanbolger.nanopoolmonitor.databinding.AccountItemBinding;
+import com.gaelanbolger.nanopoolmonitor.ui.common.DataBoundListAdapter;
+import com.gaelanbolger.nanopoolmonitor.util.Objects;
 import com.gaelanbolger.nanopoolmonitor.vo.Account;
 
-import java.util.List;
-
-public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.Holder> {
+public class AccountAdapter extends DataBoundListAdapter<Account, AccountItemBinding> {
 
     public interface AccountClickCallback {
         void onClick(Account account);
     }
 
-    private final DataBindingComponent dataBindingComponent;
-    private final AccountClickCallback callback;
-
-    private List<Account> items;
+    private DataBindingComponent dataBindingComponent;
+    private AccountClickCallback callback;
 
     public AccountAdapter(DataBindingComponent dataBindingComponent, AccountClickCallback callback) {
         this.dataBindingComponent = dataBindingComponent;
@@ -29,7 +26,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.Holder> 
     }
 
     @Override
-    public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
+    protected AccountItemBinding createBinding(ViewGroup parent) {
         AccountItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
                 R.layout.account_item, parent, false, dataBindingComponent);
         binding.getRoot().setOnClickListener((v) -> {
@@ -38,31 +35,21 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.Holder> 
                 callback.onClick(account);
             }
         });
-        return new Holder(binding);
+        return binding;
     }
 
     @Override
-    public void onBindViewHolder(Holder holder, int position) {
-        holder.binding.setAccount(items.get(position));
+    protected void bind(AccountItemBinding binding, Account item) {
+        binding.setAccount(item);
     }
 
     @Override
-    public int getItemCount() {
-        return items != null ? items.size() : 0;
+    protected boolean areItemsTheSame(Account oldItem, Account newItem) {
+        return areContentsTheSame(oldItem, newItem);
     }
 
-    public void setItems(List<Account> items) {
-        this.items = items;
-        notifyDataSetChanged();
-    }
-
-    public class Holder extends RecyclerView.ViewHolder {
-
-        private final AccountItemBinding binding;
-
-        public Holder(AccountItemBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
-        }
+    @Override
+    protected boolean areContentsTheSame(Account oldItem, Account newItem) {
+        return Objects.equals(oldItem.getAddress(), newItem.getAddress());
     }
 }

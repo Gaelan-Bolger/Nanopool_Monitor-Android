@@ -20,13 +20,13 @@ public class UserDaoTest extends DbTest {
         final User user = TestUtils.createUser("0x1");
         database.userDao().insert(user);
 
-        final User loaded = getValue(database.userDao().findByAccount(user.getAccount()));
+        final User loaded = getValue(database.userDao().findByAddress(user.getAccount()));
         assertThat(loaded.getAccount(), is(user.getAccount()));
 
         final User replacement = TestUtils.createUser("0x2");
         database.userDao().insert(replacement);
 
-        final User loadedReplacement = getValue(database.userDao().findByAccount("0x2"));
+        final User loadedReplacement = getValue(database.userDao().findByAddress("0x2"));
         assertThat(loadedReplacement.getAccount(), is("0x2"));
     }
 }

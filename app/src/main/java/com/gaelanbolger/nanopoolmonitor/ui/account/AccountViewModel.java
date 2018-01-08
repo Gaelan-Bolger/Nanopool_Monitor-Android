@@ -1,4 +1,4 @@
-package com.gaelanbolger.nanopoolmonitor.ui.scan;
+package com.gaelanbolger.nanopoolmonitor.ui.account;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
@@ -10,12 +10,15 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class ScanViewModel extends ViewModel {
+/**
+ * ViewModel which saves user created Account objects
+ */
+public class AccountViewModel extends ViewModel {
 
     private AccountRepository accountRepository;
 
     @Inject
-    public ScanViewModel(AccountRepository accountRepository) {
+    public AccountViewModel(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
 
@@ -23,7 +26,11 @@ public class ScanViewModel extends ViewModel {
         return accountRepository.loadAccounts();
     }
 
-    public void insertAccount(String address) {
-        accountRepository.insertAccount(address);
+    public void insertAccount(Account account) {
+        accountRepository.insertAccount(account);
+    }
+
+    public void deleteAccount(Account account) {
+        accountRepository.deleteAccount(account);
     }
 }

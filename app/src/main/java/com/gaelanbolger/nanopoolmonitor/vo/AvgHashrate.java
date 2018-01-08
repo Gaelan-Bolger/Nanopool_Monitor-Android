@@ -24,7 +24,6 @@ public class AvgHashrate {
     }
 
     public AvgHashrate(String h1, String h3, String h6, String h12, String h24) {
-        super();
         this.h1 = h1;
         this.h3 = h3;
         this.h6 = h6;

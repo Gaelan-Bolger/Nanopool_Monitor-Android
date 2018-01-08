@@ -13,4 +13,6 @@ public abstract class NanopoolMonitorDatabase extends RoomDatabase {
     public abstract AccountDao accountDao();
 
     public abstract UserDao userDao();
+
+    public abstract WorkerDao workerDao();
 }

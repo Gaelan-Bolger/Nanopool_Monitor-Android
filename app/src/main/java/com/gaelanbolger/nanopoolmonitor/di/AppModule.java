@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import com.gaelanbolger.nanopoolmonitor.db.AccountDao;
 import com.gaelanbolger.nanopoolmonitor.db.NanopoolMonitorDatabase;
 import com.gaelanbolger.nanopoolmonitor.db.UserDao;
+import com.gaelanbolger.nanopoolmonitor.db.WorkerDao;
 
 import javax.inject.Singleton;
 
@@ -30,9 +31,7 @@ class AppModule {
     @Singleton
     NanopoolMonitorDatabase provideDb(Application application) {
         return Room.databaseBuilder(
-                application,
-                NanopoolMonitorDatabase.class,
-                "nanopool_monitor.db"
+                application, NanopoolMonitorDatabase.class, "nanopool_monitor.db"
         ).build();
     }
 
@@ -46,5 +45,11 @@ class AppModule {
     @Singleton
     UserDao provideUserDao(NanopoolMonitorDatabase database) {
         return database.userDao();
+    }
+
+    @Provides
+    @Singleton
+    WorkerDao provideWorkerDao(NanopoolMonitorDatabase database) {
+        return database.workerDao();
     }
 }

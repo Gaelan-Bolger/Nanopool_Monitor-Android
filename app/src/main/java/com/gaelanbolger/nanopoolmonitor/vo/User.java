@@ -12,6 +12,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity(tableName = "user")
 public class User {
@@ -36,15 +37,15 @@ public class User {
 
     @Ignore
     public User() {
-        this(null, null, null, null, null);
+        this("", null, null, null, null);
     }
 
-    public User(String account, String unconfirmedBalance, String balance, String hashrate, AvgHashrate avgHashrate) {
+    public User(@NonNull String account, String unconfirmedBalance, String balance, String hashrate, AvgHashrate avgHashrate) {
         this(account, unconfirmedBalance, balance, hashrate, avgHashrate, new ArrayList<>());
     }
 
     @Ignore
-    public User(String account, String unconfirmedBalance, String balance, String hashrate, AvgHashrate avgHashrate, List<Worker> workers) {
+    public User(@NonNull String account, String unconfirmedBalance, String balance, String hashrate, AvgHashrate avgHashrate, List<Worker> workers) {
         this.account = account;
         this.unconfirmedBalance = unconfirmedBalance;
         this.balance = balance;
@@ -53,11 +54,12 @@ public class User {
         this.workers = workers;
     }
 
+    @NonNull
     public String getAccount() {
         return account;
     }
 
-    public void setAccount(String account) {
+    public void setAccount(@NonNull String account) {
         this.account = account;
     }
 
@@ -99,5 +101,30 @@ public class User {
 
     public void setWorkers(List<Worker> workers) {
         this.workers = workers;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return Objects.equals(account, user.account);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(account);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "account='" + account + '\'' +
+                ", unconfirmedBalance='" + unconfirmedBalance + '\'' +
+                ", balance='" + balance + '\'' +
+                ", hashrate='" + hashrate + '\'' +
+                ", avgHashrate=" + avgHashrate +
+                ", workers=" + workers +
+                '}';
     }
 }

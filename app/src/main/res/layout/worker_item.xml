@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.gaelanbolger.nanopoolmonitor.util.DateUtils" />
+
+        <variable
+            name="number"
+            type="Integer" />
+
+        <variable
+            name="worker"
+            type="com.gaelanbolger.nanopoolmonitor.vo.Worker" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorItemBackground"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:minHeight="?android:attr/listPreferredItemHeight"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp">
+
+        <TextView
+            android:id="@+id/number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:minWidth="48dp"
+            android:text="@{String.valueOf(number)}"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="101" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/worker_extra"
+            app:layout_constraintStart_toEndOf="@+id/number"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/worker_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{worker.id}"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                tools:text="MAINFRAME" />
+
+            <TextView
+                android:id="@+id/worker_lastshare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{DateUtils.timeAgo(worker.lastshare * 1000)}"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                tools:text="17 minutes ago" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/worker_extra"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="56dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/worker_hashrate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@{@string/worker_hashrate(worker.hashrate)}"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                tools:text="17.3 MH/s" />
+
+            <TextView
+                android:id="@+id/worker_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@{String.valueOf(worker.rating)}"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                tools:text="1073" />
+        </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
+</layout>

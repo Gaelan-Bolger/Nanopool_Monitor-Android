@@ -3,7 +3,7 @@ package com.gaelanbolger.nanopoolmonitor.di;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
-import com.gaelanbolger.nanopoolmonitor.ui.scan.ScanViewModel;
+import com.gaelanbolger.nanopoolmonitor.ui.account.AccountViewModel;
 import com.gaelanbolger.nanopoolmonitor.ui.user.UserViewModel;
 import com.gaelanbolger.nanopoolmonitor.viewmodel.NanopoolViewModelFactory;
 
@@ -16,8 +16,8 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(ScanViewModel.class)
-    abstract ViewModel bindScanViewModel(ScanViewModel scanViewModel);
+    @ViewModelKey(AccountViewModel.class)
+    abstract ViewModel bindAccountViewModel(AccountViewModel accountViewModel);
 
     @Binds
     @IntoMap

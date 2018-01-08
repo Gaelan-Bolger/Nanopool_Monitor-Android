@@ -1,7 +1,10 @@
 package com.gaelanbolger.nanopoolmonitor.di;
 
-import com.gaelanbolger.nanopoolmonitor.ui.scan.ScanFragment;
+import com.gaelanbolger.nanopoolmonitor.ui.account.AccountFragment;
+import com.gaelanbolger.nanopoolmonitor.ui.account.NewAccountFragment;
 import com.gaelanbolger.nanopoolmonitor.ui.user.UserFragment;
+import com.gaelanbolger.nanopoolmonitor.ui.user.UserWorkersFragment;
+import com.gaelanbolger.nanopoolmonitor.ui.user.UserWorkersFragment;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -10,8 +13,14 @@ import dagger.android.ContributesAndroidInjector;
 public abstract class FragmentBuildersModule {
 
     @ContributesAndroidInjector
-    abstract ScanFragment contributeScanFragment();
+    abstract AccountFragment contributeAccountFragment();
+
+    @ContributesAndroidInjector
+    abstract NewAccountFragment contributeNewAccountFragment();
 
     @ContributesAndroidInjector
     abstract UserFragment contributeUserFragment();
+
+    @ContributesAndroidInjector
+    abstract UserWorkersFragment contributeWorkerFragment();
 }

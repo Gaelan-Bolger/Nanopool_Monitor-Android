@@ -4,7 +4,8 @@ import android.support.v4.app.FragmentManager;
 
 import com.gaelanbolger.nanopoolmonitor.MainActivity;
 import com.gaelanbolger.nanopoolmonitor.R;
-import com.gaelanbolger.nanopoolmonitor.ui.scan.ScanFragment;
+import com.gaelanbolger.nanopoolmonitor.ui.account.AccountFragment;
+import com.gaelanbolger.nanopoolmonitor.ui.account.NewAccountFragment;
 import com.gaelanbolger.nanopoolmonitor.ui.user.UserFragment;
 
 import javax.inject.Inject;
@@ -23,19 +24,31 @@ public class NavigationController {
         this.fragmentManager = mainActivity.getSupportFragmentManager();
     }
 
-    public void navigateToScan() {
-        ScanFragment scanFragment = new ScanFragment();
+    public void navigateToAccount(String address) {
+        AccountFragment fragment = AccountFragment.create(address);
         fragmentManager.beginTransaction()
-                .replace(containerId, scanFragment)
+                .replace(containerId, fragment)
+                .commitAllowingStateLoss();
+    }
+
+    public void navigateToNewAccount() {
+        NewAccountFragment fragment = NewAccountFragment.create();
+        fragmentManager.beginTransaction()
+                .add(containerId, fragment)
+                .addToBackStack(null)
                 .commitAllowingStateLoss();
     }
 
     public void navigateToUser(String address) {
         String tag = "user" + "/" + address;
-        UserFragment userFragment = UserFragment.create(address);
+        UserFragment fragment = UserFragment.create(address);
         fragmentManager.beginTransaction()
-                .replace(containerId, userFragment, tag)
+                .replace(containerId, fragment, tag)
                 .addToBackStack(null)
                 .commitAllowingStateLoss();
+    }
+
+    public void popBackStack() {
+        fragmentManager.popBackStack();
     }
 }

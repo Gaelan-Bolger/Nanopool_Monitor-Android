@@ -9,4 +9,7 @@
     <string name="account">Account</string>
     <string name="submit">Submit</string>
     <string name="scan_barcode">Scan Barcode</string>
+    <string name="add_address">Add address</string>
+
+    <string name="worker_hashrate">%s Mh/s</string>
 </resources>

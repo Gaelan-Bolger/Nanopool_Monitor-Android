@@ -25,7 +25,11 @@ public class AccountRepository {
         return accountDao.getAll();
     }
 
-    public void insertAccount(String address) {
-        appExecutors.diskIO().execute(() -> accountDao.insert(new Account(address)));
+    public void insertAccount(Account account) {
+        appExecutors.diskIO().execute(() -> accountDao.insert(account));
+    }
+
+    public void deleteAccount(Account account) {
+        appExecutors.diskIO().execute(() -> accountDao.delete(account));
     }
 }

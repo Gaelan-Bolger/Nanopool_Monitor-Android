@@ -1,23 +1,25 @@
 
 package com.gaelanbolger.nanopoolmonitor.vo;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-@Entity(tableName = "worker")
+import java.util.Objects;
+
+@Entity(tableName = "worker", primaryKeys = {"id", "uid"})
 public class Worker {
 
     @SerializedName("id")
+    @NonNull
     private String id;
-    @PrimaryKey
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT, collate = ColumnInfo.NOCASE)
     @SerializedName("uid")
     @NonNull
-    private long uid;
+    private String uid;
     @SerializedName("hashrate")
     private String hashrate;
     @SerializedName("lastshare")
@@ -37,10 +39,10 @@ public class Worker {
 
     @Ignore
     public Worker() {
+        this("", "", null, 0, 0, null, null, null, null, null);
     }
 
-    public Worker(String id, long uid, String hashrate, long lastshare, long rating, String h1, String h3, String h6, String h12, String h24) {
-        super();
+    public Worker(@NonNull String id, @NonNull String uid, String hashrate, long lastshare, long rating, String h1, String h3, String h6, String h12, String h24) {
         this.id = id;
         this.uid = uid;
         this.hashrate = hashrate;
@@ -53,19 +55,21 @@ public class Worker {
         this.h24 = h24;
     }
 
+    @NonNull
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(@NonNull String id) {
         this.id = id;
     }
 
-    public long getUid() {
+    @NonNull
+    public String getUid() {
         return uid;
     }
 
-    public void setUid(long uid) {
+    public void setUid(@NonNull String uid) {
         this.uid = uid;
     }
 
@@ -133,4 +137,33 @@ public class Worker {
         this.h24 = h24;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Worker)) return false;
+        Worker worker = (Worker) o;
+        return Objects.equals(id, worker.id) &&
+                Objects.equals(uid, worker.uid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, uid);
+    }
+
+    @Override
+    public String toString() {
+        return "Worker{" +
+                "id='" + id + '\'' +
+                ", uid='" + uid + '\'' +
+                ", hashrate='" + hashrate + '\'' +
+                ", lastshare=" + lastshare +
+                ", rating=" + rating +
+                ", h1='" + h1 + '\'' +
+                ", h3='" + h3 + '\'' +
+                ", h6='" + h6 + '\'' +
+                ", h12='" + h12 + '\'' +
+                ", h24='" + h24 + '\'' +
+                '}';
+    }
 }

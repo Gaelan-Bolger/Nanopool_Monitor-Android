@@ -22,6 +22,8 @@ import com.gaelanbolger.nanopoolmonitor.databinding.UserFragmentBinding;
 import com.gaelanbolger.nanopoolmonitor.di.Injectable;
 import com.gaelanbolger.nanopoolmonitor.util.AutoClearedValue;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import javax.inject.Inject;
@@ -33,9 +35,9 @@ public class UserFragment extends Fragment implements Injectable {
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
-    DataBindingComponent dataBindingComponent = new FragmentDataBindingComponent(this);
-    AutoClearedValue<UserFragmentBinding> binding;
-
+    private DataBindingComponent dataBindingComponent = new FragmentDataBindingComponent(this);
+    private AutoClearedValue<UserFragmentBinding> binding;
+    private AutoClearedValue<UserFragmentPagerAdapter> adapter;
     private UserViewModel userViewModel;
 
     public static UserFragment create(String address) {
@@ -49,9 +51,10 @@ public class UserFragment extends Fragment implements Injectable {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        UserFragmentPagerAdapter pagerAdapter = new UserFragmentPagerAdapter(getChildFragmentManager());
+        adapter = new AutoClearedValue<>(this, pagerAdapter);
         UserFragmentBinding dataBinding = DataBindingUtil.inflate(inflater, R.layout.user_fragment,
                 container, false, dataBindingComponent);
-        dataBinding.setRetryCallback(() -> userViewModel.retry());
         binding = new AutoClearedValue<>(this, dataBinding);
         return dataBinding.getRoot();
     }
@@ -59,18 +62,22 @@ public class UserFragment extends Fragment implements Injectable {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        userViewModel = ViewModelProviders.of(this, viewModelFactory).get(UserViewModel.class);
-        userViewModel.setAddress(getArguments().getString(KEY_ADDRESS));
+        userViewModel = ViewModelProviders.of(getActivity(), viewModelFactory).get(UserViewModel.class);
+        userViewModel.setAddress(getArguments() == null ? null : getArguments().getString(KEY_ADDRESS));
         userViewModel.getUser().observe(this, userResource -> {
             binding.get().setUser(userResource != null ? userResource.data : null);
             binding.get().setUserResource(userResource);
             binding.get().executePendingBindings();
         });
 
-        binding.get().pager.setAdapter(new UserFragmentPagerAdapter(getChildFragmentManager()));
+        binding.get().pager.setAdapter(adapter.get());
+        binding.get().tabs.setupWithViewPager(binding.get().pager);
+        binding.get().setRetryCallback(() -> userViewModel.retry());
     }
 
     public class UserFragmentPagerAdapter extends FragmentStatePagerAdapter {
+
+        private Map<Integer, Fragment> pages = new HashMap<>(getCount());
 
         public UserFragmentPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -78,7 +85,19 @@ public class UserFragment extends Fragment implements Injectable {
 
         @Override
         public Fragment getItem(int position) {
-            return DummyFragment.create(position);
+            Fragment f = pages.get(position);
+            if (f == null) {
+                switch (position) {
+                    case 0:
+                        f = new UserWorkersFragment();
+                        break;
+                    default:
+                        f = DummyFragment.create(position);
+                        break;
+                }
+                pages.put(position, f);
+            }
+            return f;
         }
 
         @Override
@@ -89,6 +108,8 @@ public class UserFragment extends Fragment implements Injectable {
         @Nullable
         @Override
         public CharSequence getPageTitle(int position) {
+            if (getItem(position) instanceof UserWorkersFragment)
+                return "Workers";
             return "Page " + (position + 1);
         }
     }

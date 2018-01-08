@@ -2,9 +2,11 @@ package com.gaelanbolger.nanopoolmonitor.api;
 
 import android.arch.lifecycle.LiveData;
 
-import com.gaelanbolger.nanopoolmonitor.vo.AccountExist;
-import com.gaelanbolger.nanopoolmonitor.vo.Balance;
-import com.gaelanbolger.nanopoolmonitor.vo.UserResponse;
+import com.gaelanbolger.nanopoolmonitor.vo.Payment;
+import com.gaelanbolger.nanopoolmonitor.vo.User;
+import com.gaelanbolger.nanopoolmonitor.vo.Worker;
+
+import java.util.List;
 
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -12,11 +14,20 @@ import retrofit2.http.Path;
 public interface NanopoolService {
 
     @GET("v1/eth/accountexist/{address}")
-    LiveData<ApiResponse<AccountExist>> checkUser(@Path("address") String address);
+    LiveData<ApiResponse<NanopoolResponse<Boolean>>> accountExist(@Path("address") String address);
 
     @GET("v1/eth/user/{address}")
-    LiveData<ApiResponse<UserResponse>> getUser(@Path("address") String address);
+    LiveData<ApiResponse<NanopoolResponse<User>>> getUser(@Path("address") String address);
 
     @GET("v1/eth/balance/{address}")
-    LiveData<ApiResponse<Balance>> getBalance(@Path("address") String address);
+    LiveData<ApiResponse<NanopoolResponse<Double>>> getBalance(@Path("address") String address);
+
+    @GET("v1/eth/workers/{address}")
+    LiveData<ApiResponse<NanopoolResponse<List<Worker>>>> getWorkers(@Path("address") String address);
+
+    @GET("v1/eth/payments/{address}")
+    LiveData<ApiResponse<NanopoolResponse<List<Payment>>>> getPayments(@Path("address") String address);
+
+    // TODO share rates
+    // TODO remove ApiResponse
 }

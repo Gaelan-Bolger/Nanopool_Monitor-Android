@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MainActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -14,16 +13,21 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="?android:attr/listPreferredItemHeight">
+        android:background="@color/colorItemBackground"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:minHeight="?android:attr/listPreferredItemHeight"
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/address"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{account.address}"
+            android:textAppearance="?android:attr/textAppearanceListItem"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="0x123456789ABCDEFGHIJKLMNOPQRSTUVWRXYZ" />
     </android.support.constraint.ConstraintLayout>
 </layout>

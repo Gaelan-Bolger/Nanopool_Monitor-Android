@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black">
+
+        <fragment
+            android:id="@+id/barcode"
+            android:name="com.google.android.gms.samples.vision.barcodereader.BarcodeCapture"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:gvb_auto_focus="true"
+            app:gvb_camera_facing="back"
+            app:gvb_code_format="qr_code"
+            app:gvb_draw="true"
+            app:gvb_rect_colors="@array/rect_color"
+            app:gvb_show_text="false"
+            app:gvb_touch="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+</layout>
