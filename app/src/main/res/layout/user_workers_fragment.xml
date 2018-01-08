@@ -5,15 +5,31 @@
 
     <data>
 
+        <import type="com.gaelanbolger.nanopoolmonitor.vo.Status" />
+
+        <variable
+            name="userResource"
+            type="com.gaelanbolger.nanopoolmonitor.vo.Resource" />
+
+        <variable
+            name="retryCallback"
+            type="com.gaelanbolger.nanopoolmonitor.ui.common.RetryCallback" />
     </data>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/worker_list"
+    <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/worker_item" />
+        app:onRefreshListener="@{() -> retryCallback.retry()}"
+        app:refreshing="@{userResource.status == Status.LOADING}">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/worker_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/worker_item" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 </layout>

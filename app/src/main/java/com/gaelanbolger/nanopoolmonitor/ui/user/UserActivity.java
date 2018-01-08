@@ -64,6 +64,8 @@ public class UserActivity extends AppCompatActivity implements HasSupportFragmen
         }
 
         binding = DataBindingUtil.setContentView(this, R.layout.user_activity);
+        binding.setAddress(address);
+
         setSupportActionBar(binding.toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -79,10 +81,8 @@ public class UserActivity extends AppCompatActivity implements HasSupportFragmen
         userViewModel.setAddress(address);
         userViewModel.getUser().observe(this, userResource -> {
             binding.setUser(userResource != null ? userResource.data : null);
-            binding.setUserResource(userResource);
             binding.executePendingBindings();
         });
-        binding.setRetryCallback(() -> userViewModel.retry());
         binding.pager.setAdapter(new UserFragmentPagerAdapter(getSupportFragmentManager()));
         binding.tabs.setupWithViewPager(binding.pager);
     }
@@ -126,7 +126,7 @@ public class UserActivity extends AppCompatActivity implements HasSupportFragmen
                         f = new UserWorkersFragment();
                         break;
                     default:
-                        f = UserFragment.DummyFragment.create(position);
+                        f = DummyFragment.create(position);
                         break;
                 }
                 pages.put(position, f);
@@ -153,7 +153,7 @@ public class UserActivity extends AppCompatActivity implements HasSupportFragmen
         private Random random = new Random();
 
         public static Fragment create(int position) {
-            UserFragment.DummyFragment dummyFragment = new UserFragment.DummyFragment();
+            DummyFragment dummyFragment = new DummyFragment();
             Bundle bundle = new Bundle();
             bundle.putInt("position", position);
             dummyFragment.setArguments(bundle);

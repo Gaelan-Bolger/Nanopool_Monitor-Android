@@ -6,81 +6,59 @@
 
     <data>
 
-        <import type="com.gaelanbolger.nanopoolmonitor.vo.Status" />
+        <variable
+            name="address"
+            type="String" />
 
         <variable
             name="user"
             type="com.gaelanbolger.nanopoolmonitor.vo.User" />
-
-        <variable
-            name="userResource"
-            type="com.gaelanbolger.nanopoolmonitor.vo.Resource" />
-
-        <variable
-            name="retryCallback"
-            type="com.gaelanbolger.nanopoolmonitor.ui.common.RetryCallback" />
     </data>
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:onRefreshListener="@{() -> retryCallback.retry()}"
-        app:refreshing="@{userResource.status == Status.LOADING}">
+        android:layout_height="match_parent">
 
-        <android.support.design.widget.CoordinatorLayout
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-            <android.support.design.widget.AppBarLayout
-                android:id="@+id/appbar"
+            <android.support.design.widget.SubtitleCollapsingToolbarLayout
+                android:id="@+id/collapsing_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+                android:layout_height="256dp"
+                app:collapsedSubtitleTextAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle"
+                app:contentScrim="?attr/colorPrimary"
+                app:expandedSubtitleTextAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:subtitle="@{address}"
+                app:title="@{@string/worker_balance(String.valueOf(user.balance))}">
 
-                <android.support.design.widget.CollapsingToolbarLayout
-                    android:id="@+id/collapsing_toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="256dp"
-                    app:contentScrim="?attr/colorPrimary"
-                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-                    <android.support.v7.widget.Toolbar
-                        android:id="@+id/toolbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
-                        android:background="?attr/colorPrimaryDark"
-                        app:layout_collapseMode="pin"
-                        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-                </android.support.design.widget.CollapsingToolbarLayout>
-
-                <android.support.design.widget.TabLayout
-                    android:id="@+id/tabs"
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:layout_gravity="bottom"
-                    app:tabIndicatorColor="@android:color/white"
-                    app:tabIndicatorHeight="4dp"
-                    app:tabMode="fixed" />
-            </android.support.design.widget.AppBarLayout>
+                    android:background="?attr/colorPrimaryDark"
+                    app:layout_collapseMode="pin"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            </android.support.design.widget.SubtitleCollapsingToolbarLayout>
 
-            <FrameLayout
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabs"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="bottom"
+                app:tabIndicatorColor="@android:color/white"
+                app:tabIndicatorHeight="4dp"
+                app:tabMode="fixed" />
+        </android.support.design.widget.AppBarLayout>
 
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/pager"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <include
-                    layout="@layout/loading_state"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    app:callback="@{() -> retryCallback.retry()}"
-                    app:resource="@{userResource}" />
-            </FrameLayout>
-        </android.support.design.widget.CoordinatorLayout>
-    </android.support.v4.widget.SwipeRefreshLayout>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    </android.support.design.widget.CoordinatorLayout>
 </layout>

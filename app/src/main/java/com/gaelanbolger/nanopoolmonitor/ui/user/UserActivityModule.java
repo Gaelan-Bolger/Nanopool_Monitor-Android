@@ -7,8 +7,5 @@ import dagger.android.ContributesAndroidInjector;
 public abstract class UserActivityModule {
 
     @ContributesAndroidInjector
-    abstract UserFragment contributeUserFragment();
-
-    @ContributesAndroidInjector
     abstract UserWorkersFragment contributeUserWorkersFragment();
 }

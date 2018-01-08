@@ -20,14 +20,6 @@ public class UserNavigationController {
         this.fragmentManager = userActivity.getSupportFragmentManager();
     }
 
-    public void navigateToUser(String address) {
-        String tag = "user" + "/" + address;
-        UserFragment fragment = UserFragment.create(address);
-        fragmentManager.beginTransaction()
-                .replace(containerId, fragment, tag)
-                .commitAllowingStateLoss();
-    }
-
     public void popBackStack() {
         fragmentManager.popBackStack();
     }

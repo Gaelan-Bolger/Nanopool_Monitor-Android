@@ -43,11 +43,13 @@ public class UserWorkersFragment extends Fragment implements Injectable {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        UserViewModel userViewModel = ViewModelProviders.of(getActivity(), viewModelFactory).get(UserViewModel.class);
+        userViewModel.getUser().observe(this, userResource -> binding.get().setUserResource(userResource));
+        userViewModel.getWorkers().observe(this, workers -> adapter.get().replace(workers));
+        binding.get().setRetryCallback(() -> userViewModel.retry());
         binding.get().workerList.addItemDecoration(
                 new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL)
         );
         binding.get().workerList.setAdapter(adapter.get());
-        UserViewModel userViewModel = ViewModelProviders.of(getActivity(), viewModelFactory).get(UserViewModel.class);
-        userViewModel.getWorkers().observe(this, workers -> adapter.get().replace(workers));
     }
 }

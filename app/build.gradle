@@ -79,4 +79,5 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.5.0'
 
     implementation 'xyz.belvi.mobilevision:barcodescanner:2.0.0'
+    compile 'com.hendraanggrian:collapsingtoolbarlayout-subtitle:27.0.1'
 }
