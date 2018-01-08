@@ -28,7 +28,7 @@ import com.gaelanbolger.nanopoolmonitor.api.NanopoolService;
 import com.gaelanbolger.nanopoolmonitor.binding.FragmentDataBindingComponent;
 import com.gaelanbolger.nanopoolmonitor.databinding.AccountFragmentBinding;
 import com.gaelanbolger.nanopoolmonitor.di.Injectable;
-import com.gaelanbolger.nanopoolmonitor.ui.common.NavigationController;
+import com.gaelanbolger.nanopoolmonitor.ui.user.UserActivity;
 import com.gaelanbolger.nanopoolmonitor.util.AndroidUtils;
 import com.gaelanbolger.nanopoolmonitor.util.AutoClearedValue;
 import com.gaelanbolger.nanopoolmonitor.viewmodel.NanopoolViewModelFactory;
@@ -45,7 +45,7 @@ public class AccountFragment extends Fragment implements Injectable {
     @Inject
     NanopoolViewModelFactory viewModelFactory;
     @Inject
-    NavigationController navigationController;
+    AccountNavigationController accountNavigationController;
     @Inject
     NanopoolService nanopoolService;
 
@@ -75,7 +75,11 @@ public class AccountFragment extends Fragment implements Injectable {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         AccountAdapter accountAdapter = new AccountAdapter(dataBindingComponent,
-                account -> navigationController.navigateToUser(account.getAddress()));
+                account -> {
+//                    accountNavigationController.navigateToUser(account.getAddress());
+                    UserActivity.start(getActivity(), account.getAddress());
+                }
+        );
         adapter = new AutoClearedValue<>(this, accountAdapter);
         accountViewModel = ViewModelProviders.of(this, viewModelFactory).get(AccountViewModel.class);
         accountViewModel.getAccounts().observe(this, items -> adapter.get().replace(items));
@@ -127,7 +131,7 @@ public class AccountFragment extends Fragment implements Injectable {
     private void onNewAccount(View v) {
         Timber.d("onNewAccount: ");
         AndroidUtils.hideKeyboard(v);
-        navigationController.navigateToNewAccount();
+        accountNavigationController.navigateToNewAccount();
     }
 
     private void onAddAccount(View v) {
@@ -144,18 +148,19 @@ public class AccountFragment extends Fragment implements Injectable {
             public void onChanged(@Nullable ApiResponse<NanopoolResponse<Boolean>> apiResponse) {
                 checkUser.removeObserver(this);
                 binding.get().submit.setEnabled(true);
-                if (apiResponse != null) {
+                if (apiResponse != null && apiResponse.body != null) {
                     if (apiResponse.body.isStatus()) {
                         accountViewModel.insertAccount(new Account(address));
                         binding.get().input.setError(null);
                         binding.get().input.setText(null);
                         AndroidUtils.hideKeyboard(v);
-                        navigationController.navigateToUser(address);
+                        UserActivity.start(getActivity(), address);
                     } else {
                         Toast.makeText(getActivity(), apiResponse.body.getError(), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getActivity(), getString(R.string.unknown_error), Toast.LENGTH_SHORT).show();
+                    String errorMessage = apiResponse != null ? apiResponse.errorMessage : getString(R.string.unknown_error);
+                    Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
                 }
             }
         });

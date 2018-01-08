@@ -1,27 +1,23 @@
-package com.gaelanbolger.nanopoolmonitor.ui.common;
+package com.gaelanbolger.nanopoolmonitor.ui.account;
 
 import android.support.v4.app.FragmentManager;
 
-import com.gaelanbolger.nanopoolmonitor.MainActivity;
 import com.gaelanbolger.nanopoolmonitor.R;
-import com.gaelanbolger.nanopoolmonitor.ui.account.AccountFragment;
-import com.gaelanbolger.nanopoolmonitor.ui.account.NewAccountFragment;
-import com.gaelanbolger.nanopoolmonitor.ui.user.UserFragment;
 
 import javax.inject.Inject;
 
 /**
- * A utility class that handles navigation in {@link MainActivity}.
+ * A utility class that handles navigation in {@link AccountActivity}.
  */
-public class NavigationController {
+public class AccountNavigationController {
 
     private final int containerId;
     private final FragmentManager fragmentManager;
 
     @Inject
-    public NavigationController(MainActivity mainActivity) {
+    public AccountNavigationController(AccountActivity accountActivity) {
         this.containerId = R.id.container;
-        this.fragmentManager = mainActivity.getSupportFragmentManager();
+        this.fragmentManager = accountActivity.getSupportFragmentManager();
     }
 
     public void navigateToAccount(String address) {
@@ -35,15 +31,6 @@ public class NavigationController {
         NewAccountFragment fragment = NewAccountFragment.create();
         fragmentManager.beginTransaction()
                 .add(containerId, fragment)
-                .addToBackStack(null)
-                .commitAllowingStateLoss();
-    }
-
-    public void navigateToUser(String address) {
-        String tag = "user" + "/" + address;
-        UserFragment fragment = UserFragment.create(address);
-        fragmentManager.beginTransaction()
-                .replace(containerId, fragment, tag)
                 .addToBackStack(null)
                 .commitAllowingStateLoss();
     }

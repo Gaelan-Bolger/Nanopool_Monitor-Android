@@ -15,7 +15,6 @@ import com.gaelanbolger.nanopoolmonitor.R;
 import com.gaelanbolger.nanopoolmonitor.binding.FragmentDataBindingComponent;
 import com.gaelanbolger.nanopoolmonitor.databinding.NewAccountFragmentBinding;
 import com.gaelanbolger.nanopoolmonitor.di.Injectable;
-import com.gaelanbolger.nanopoolmonitor.ui.common.NavigationController;
 import com.gaelanbolger.nanopoolmonitor.util.AndroidUtils;
 import com.gaelanbolger.nanopoolmonitor.util.AutoClearedValue;
 import com.google.android.gms.samples.vision.barcodereader.BarcodeCapture;
@@ -32,7 +31,7 @@ import xyz.belvi.mobilevisionbarcodescanner.BarcodeRetriever;
 public class NewAccountFragment extends Fragment implements Injectable {
 
     @Inject
-    NavigationController navigationController;
+    AccountNavigationController accountNavigationController;
 
     DataBindingComponent dataBindingComponent = new FragmentDataBindingComponent(this);
 
@@ -60,8 +59,8 @@ public class NewAccountFragment extends Fragment implements Injectable {
             public void onRetrieved(Barcode barcode) {
                 Timber.d("onRetrieved: " + barcode);
                 AndroidUtils.runOnUiThread(() -> {
-                    navigationController.popBackStack();
-                    navigationController.navigateToAccount(barcode.displayValue.contains(":")
+                    accountNavigationController.popBackStack();
+                    accountNavigationController.navigateToAccount(barcode.displayValue.contains(":")
                             ? barcode.displayValue.split(":")[1] : barcode.displayValue);
                 });
             }
