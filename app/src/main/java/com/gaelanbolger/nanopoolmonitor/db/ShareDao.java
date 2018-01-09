@@ -23,6 +23,6 @@ public interface ShareDao {
     @Query("DELETE FROM share WHERE address = :address")
     void deleteAll(String address);
 
-    @Query("SELECT * FROM share WHERE address = :address")
+    @Query("SELECT * FROM share WHERE address = :address ORDER BY date DESC")
     LiveData<List<Share>> findByAddress(String address);
 }

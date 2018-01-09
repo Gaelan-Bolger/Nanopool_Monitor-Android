@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorItemBackground"
-        android:minHeight="?android:attr/listPreferredItemHeight"
+        android:minHeight="?android:attr/listPreferredItemHeightSmall"
         android:paddingEnd="16dp"
         android:paddingStart="16dp">
 
@@ -24,21 +24,24 @@
             android:id="@+id/payment_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@{String.valueOf(payment.amount)}"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            app:layout_constraintBottom_toTopOf="@+id/payment_amount"
+            app:dateTime="@{payment.date * 1000}"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/payment_amount"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed"
-            tools:text="10.005446" />
+            tools:text="Sat, Jan 4 2018, 9:48 AM" />
 
         <TextView
             android:id="@+id/payment_amount"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{String.valueOf(payment.amount)}"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            app:dateTime="@{payment.date * 1000}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/payment_date"
-            tools:text="Sat, Jan 4 2018, 9:48 AM" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/payment_date"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="10.005446" />
     </android.support.constraint.ConstraintLayout>
 </layout>

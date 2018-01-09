@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DividerItemDecoration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,16 +26,17 @@ public class UserWorkersFragment extends Fragment implements Injectable {
     ViewModelProvider.Factory viewModelFactory;
 
     private DataBindingComponent dataBindingComponent = new FragmentDataBindingComponent(this);
-    private AutoClearedValue<UserWorkersFragmentBinding> binding;
     private AutoClearedValue<UserWorkersAdapter> adapter;
+    private AutoClearedValue<UserWorkersFragmentBinding> binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        UserWorkersFragmentBinding dataBinding = DataBindingUtil.inflate(inflater, R.layout.user_workers_fragment, container, false, dataBindingComponent);
-        binding = new AutoClearedValue<>(this, dataBinding);
         UserWorkersAdapter workersAdapter = new UserWorkersAdapter(dataBindingComponent);
         adapter = new AutoClearedValue<>(this, workersAdapter);
+        UserWorkersFragmentBinding dataBinding = DataBindingUtil.inflate(inflater, R.layout.user_workers_fragment, container, false, dataBindingComponent);
+        binding = new AutoClearedValue<>(this, dataBinding);
+        binding.get().workerList.setAdapter(adapter.get());
         return dataBinding.getRoot();
     }
 
@@ -44,14 +44,15 @@ public class UserWorkersFragment extends Fragment implements Injectable {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         UserWorkersViewModel userWorkersViewModel = ViewModelProviders.of(this, viewModelFactory).get(UserWorkersViewModel.class);
-        userWorkersViewModel.getWorkers().observe(this, workersResource -> adapter.get().replace(workersResource != null ? workersResource.data : null));
+        userWorkersViewModel.getWorkers().observe(this, workersResource -> {
+            binding.get().setResource(workersResource);
+            adapter.get().replace(workersResource != null ? workersResource.data : null);
+        });
         UserViewModel userViewModel = ViewModelProviders.of(getActivity(), viewModelFactory).get(UserViewModel.class);
         userViewModel.getUser().observe(this, userResource -> {
             if (userResource != null && userResource.data != null) {
                 userWorkersViewModel.setAddress(userResource.data.getAccount());
             }
         });
-        binding.get().workerList.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
-        binding.get().workerList.setAdapter(adapter.get());
     }
 }

@@ -25,8 +25,8 @@ public class Worker {
     private String uid;
     @SerializedName("hashrate")
     private String hashrate;
-    @SerializedName("lastshare")
-    private long lastshare;
+    @SerializedName("lastShare")
+    private long lastShare;
     @SerializedName("rating")
     private long rating;
 
@@ -35,12 +35,12 @@ public class Worker {
         this("", "", "", null, 0, 0);
     }
 
-    public Worker(@NonNull String address, @NonNull String id, @NonNull String uid, String hashrate, long lastshare, long rating) {
+    public Worker(@NonNull String address, @NonNull String id, @NonNull String uid, String hashrate, long lastShare, long rating) {
         this.address = address;
         this.id = id;
         this.uid = uid;
         this.hashrate = hashrate;
-        this.lastshare = lastshare;
+        this.lastShare = lastShare;
         this.rating = rating;
     }
 
@@ -79,12 +79,12 @@ public class Worker {
         this.hashrate = hashrate;
     }
 
-    public long getLastshare() {
-        return lastshare;
+    public long getLastShare() {
+        return lastShare;
     }
 
-    public void setLastshare(long lastshare) {
-        this.lastshare = lastshare;
+    public void setLastShare(long lastShare) {
+        this.lastShare = lastShare;
     }
 
     public long getRating() {
@@ -117,7 +117,7 @@ public class Worker {
                 "id='" + id + '\'' +
                 "uid='" + uid + '\'' +
                 ", hashrate='" + hashrate + '\'' +
-                ", lastshare=" + lastshare +
+                ", lastShare=" + lastShare +
                 ", rating=" + rating +
                 '}';
     }

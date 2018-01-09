@@ -27,16 +27,17 @@ public class UserSharesFragment extends Fragment implements Injectable {
     ViewModelProvider.Factory viewModelFactory;
 
     private DataBindingComponent dataBindingComponent = new FragmentDataBindingComponent(this);
-    private AutoClearedValue<UserSharesFragmentBinding> binding;
     private AutoClearedValue<UserSharesAdapter> adapter;
+    private AutoClearedValue<UserSharesFragmentBinding> binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        UserSharesFragmentBinding dataBinding = DataBindingUtil.inflate(inflater, R.layout.user_shares_fragment, container, false, dataBindingComponent);
-        binding = new AutoClearedValue<>(this, dataBinding);
         UserSharesAdapter userSharesAdapter = new UserSharesAdapter(dataBindingComponent);
         adapter = new AutoClearedValue<>(this, userSharesAdapter);
+        UserSharesFragmentBinding dataBinding = DataBindingUtil.inflate(inflater, R.layout.user_shares_fragment, container, false, dataBindingComponent);
+        binding = new AutoClearedValue<>(this, dataBinding);
+        binding.get().shareList.setAdapter(adapter.get());
         return dataBinding.getRoot();
     }
 
@@ -44,14 +45,15 @@ public class UserSharesFragment extends Fragment implements Injectable {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         UserSharesViewModel userSharesViewModel = ViewModelProviders.of(this, viewModelFactory).get(UserSharesViewModel.class);
-        userSharesViewModel.getShares().observe(this, sharesResource -> adapter.get().replace(sharesResource != null ? sharesResource.data : null));
+        userSharesViewModel.getShares().observe(this, sharesResource -> {
+            binding.get().setResource(sharesResource);
+            adapter.get().replace(sharesResource != null ? sharesResource.data : null);
+        });
         UserViewModel userViewModel = ViewModelProviders.of(getActivity(), viewModelFactory).get(UserViewModel.class);
         userViewModel.getUser().observe(this, userResource -> {
             if (userResource != null && userResource.data != null) {
                 userSharesViewModel.setAddress(userResource.data.getAccount());
             }
         });
-        binding.get().shareList.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
-        binding.get().shareList.setAdapter(adapter.get());
     }
 }

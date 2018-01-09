@@ -1,23 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
+        <import type="android.support.v7.widget.DividerItemDecoration" />
+
+        <import type="com.gaelanbolger.nanopoolmonitor.vo.Status" />
+
+        <variable
+            name="resource"
+            type="com.gaelanbolger.nanopoolmonitor.vo.Resource" />
+
+        <variable
+            name="retryCallback"
+            type="com.gaelanbolger.nanopoolmonitor.ui.common.RetryCallback" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/payment_list"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:dividerDecoration="@{DividerItemDecoration.VERTICAL}"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </android.support.constraint.ConstraintLayout>
+            tools:listitem="@layout/payment_item" />
+
+        <include
+            layout="@layout/loading_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:callback="@{() -> retryCallback.retry()}"
+            app:resource="@{resource}" />
+    </FrameLayout>
 </layout>

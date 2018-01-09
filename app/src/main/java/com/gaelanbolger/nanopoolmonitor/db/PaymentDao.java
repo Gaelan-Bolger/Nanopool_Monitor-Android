@@ -23,6 +23,6 @@ public interface PaymentDao {
     @Query("DELETE FROM payment WHERE address = :address")
     void deleteAll(String address);
 
-    @Query("SELECT * FROM payment WHERE address = :address")
+    @Query("SELECT * FROM payment WHERE address = :address ORDER BY date DESC")
     LiveData<List<Payment>> findByAddress(String address);
 }

@@ -28,16 +28,17 @@ public class UserPaymentsFragment extends Fragment implements Injectable {
     ViewModelProvider.Factory viewModelFactory;
 
     private DataBindingComponent dataBindingComponent = new FragmentDataBindingComponent(this);
-    private AutoClearedValue<UserPaymentsFragmentBinding> binding;
     private AutoClearedValue<UserPaymentsAdapter> adapter;
+    private AutoClearedValue<UserPaymentsFragmentBinding> binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        UserPaymentsFragmentBinding dataBinding = DataBindingUtil.inflate(inflater, R.layout.user_payments_fragment, container, false, dataBindingComponent);
-        binding = new AutoClearedValue<>(this, dataBinding);
         UserPaymentsAdapter userPaymentsAdapter = new UserPaymentsAdapter(dataBindingComponent);
         adapter = new AutoClearedValue<>(this, userPaymentsAdapter);
+        UserPaymentsFragmentBinding dataBinding = DataBindingUtil.inflate(inflater, R.layout.user_payments_fragment, container, false, dataBindingComponent);
+        binding = new AutoClearedValue<>(this, dataBinding);
+        binding.get().paymentList.setAdapter(adapter.get());
         return dataBinding.getRoot();
     }
 
@@ -45,14 +46,15 @@ public class UserPaymentsFragment extends Fragment implements Injectable {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         UserPaymentsViewModel userPaymentsViewModel = ViewModelProviders.of(this, viewModelFactory).get(UserPaymentsViewModel.class);
-        userPaymentsViewModel.getPayments().observe(this, paymentsResource -> adapter.get().replace(paymentsResource != null ? paymentsResource.data : null));
+        userPaymentsViewModel.getPayments().observe(this, paymentsResource -> {
+            binding.get().setResource(paymentsResource);
+            adapter.get().replace(paymentsResource != null ? paymentsResource.data : null);
+        });
         UserViewModel userViewModel = ViewModelProviders.of(getActivity(), viewModelFactory).get(UserViewModel.class);
         userViewModel.getUser().observe(this, userResource -> {
             if (userResource != null && userResource.data != null) {
                 userPaymentsViewModel.setAddress(userResource.data.getAccount());
             }
         });
-        binding.get().paymentList.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
-        binding.get().paymentList.setAdapter(adapter.get());
     }
 }

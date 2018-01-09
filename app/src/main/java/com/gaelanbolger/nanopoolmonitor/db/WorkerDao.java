@@ -23,6 +23,6 @@ public interface WorkerDao {
     @Query("DELETE FROM worker WHERE address = :address")
     void deleteAll(String address);
 
-    @Query("SELECT * FROM worker WHERE address = :address")
+    @Query("SELECT * FROM worker WHERE address = :address ORDER BY id ASC")
     LiveData<List<Worker>> findByAddress(String address);
 }

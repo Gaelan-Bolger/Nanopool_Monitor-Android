@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -8,15 +10,36 @@
             type="com.gaelanbolger.nanopoolmonitor.vo.Share" />
     </data>
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorItemBackground"
-        android:minHeight="?android:attr/listPreferredItemHeight">
+        android:minHeight="?android:attr/listPreferredItemHeightSmall"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp">
 
         <TextView
+            android:id="@+id/share_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:dateTime="@{share.date * 1000}"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/share_shares"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Jan 9th 11:59:59 (an hour ago)" />
+
+        <TextView
+            android:id="@+id/share_shares"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{String.valueOf(share.shares)}" />
+            android:text="@{String.valueOf(share.shares)}"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/share_date"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="1200" />
     </android.support.constraint.ConstraintLayout>
 </layout>

@@ -60,7 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                app:timeAgo="@{worker.lastshare * 1000}"
+                app:timeAgo="@{worker.lastShare * 1000}"
                 tools:text="17 minutes ago" />
         </LinearLayout>
 
