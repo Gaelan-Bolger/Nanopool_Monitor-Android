@@ -6,13 +6,19 @@
 
     <data>
 
-        <variable
-            name="address"
-            type="String" />
+        <import type="com.gaelanbolger.nanopoolmonitor.vo.Status" />
 
         <variable
             name="user"
             type="com.gaelanbolger.nanopoolmonitor.vo.User" />
+
+        <variable
+            name="userResource"
+            type="com.gaelanbolger.nanopoolmonitor.vo.Resource" />
+
+        <variable
+            name="retryCallback"
+            type="com.gaelanbolger.nanopoolmonitor.ui.common.RetryCallback" />
     </data>
 
     <android.support.design.widget.CoordinatorLayout
@@ -33,7 +39,7 @@
                 app:contentScrim="?attr/colorPrimary"
                 app:expandedSubtitleTextAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:subtitle="@{address}"
+                app:subtitle="@{user.account}"
                 app:title="@{@string/worker_balance(String.valueOf(user.balance))}">
 
                 <android.support.v7.widget.Toolbar
@@ -55,10 +61,17 @@
                 app:tabMode="fixed" />
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/pager"
+        <android.support.v4.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:onRefreshListener="@{() -> retryCallback.retry()}"
+            app:refreshing="@{userResource.status == Status.LOADING}">
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </android.support.v4.widget.SwipeRefreshLayout>
     </android.support.design.widget.CoordinatorLayout>
 </layout>

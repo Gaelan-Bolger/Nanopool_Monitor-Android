@@ -8,4 +8,10 @@ public abstract class UserActivityModule {
 
     @ContributesAndroidInjector
     abstract UserWorkersFragment contributeUserWorkersFragment();
+
+    @ContributesAndroidInjector
+    abstract UserPaymentsFragment contributeUserPaymentsFragment();
+
+    @ContributesAndroidInjector
+    abstract UserSharesFragment contributeUserSharesFragment();
 }

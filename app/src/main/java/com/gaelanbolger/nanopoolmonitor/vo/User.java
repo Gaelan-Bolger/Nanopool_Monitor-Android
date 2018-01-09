@@ -10,8 +10,6 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity(tableName = "user")
@@ -31,9 +29,6 @@ public class User {
     @Embedded(prefix = "ave_")
     @SerializedName("avgHashrate")
     private AvgHashrate avgHashrate;
-    @Ignore
-    @SerializedName("workers")
-    private List<Worker> workers = new ArrayList<>();
 
     @Ignore
     public User() {
@@ -41,17 +36,11 @@ public class User {
     }
 
     public User(@NonNull String account, String unconfirmedBalance, String balance, String hashrate, AvgHashrate avgHashrate) {
-        this(account, unconfirmedBalance, balance, hashrate, avgHashrate, new ArrayList<>());
-    }
-
-    @Ignore
-    public User(@NonNull String account, String unconfirmedBalance, String balance, String hashrate, AvgHashrate avgHashrate, List<Worker> workers) {
         this.account = account;
         this.unconfirmedBalance = unconfirmedBalance;
         this.balance = balance;
         this.hashrate = hashrate;
         this.avgHashrate = avgHashrate;
-        this.workers = workers;
     }
 
     @NonNull
@@ -95,14 +84,6 @@ public class User {
         this.avgHashrate = avgHashrate;
     }
 
-    public List<Worker> getWorkers() {
-        return workers;
-    }
-
-    public void setWorkers(List<Worker> workers) {
-        this.workers = workers;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -124,7 +105,6 @@ public class User {
                 ", balance='" + balance + '\'' +
                 ", hashrate='" + hashrate + '\'' +
                 ", avgHashrate=" + avgHashrate +
-                ", workers=" + workers +
                 '}';
     }
 }

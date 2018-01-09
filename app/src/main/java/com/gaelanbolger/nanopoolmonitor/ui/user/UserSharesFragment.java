@@ -15,43 +15,43 @@ import android.view.ViewGroup;
 
 import com.gaelanbolger.nanopoolmonitor.R;
 import com.gaelanbolger.nanopoolmonitor.binding.FragmentDataBindingComponent;
-import com.gaelanbolger.nanopoolmonitor.databinding.UserWorkersFragmentBinding;
+import com.gaelanbolger.nanopoolmonitor.databinding.UserSharesFragmentBinding;
 import com.gaelanbolger.nanopoolmonitor.di.Injectable;
 import com.gaelanbolger.nanopoolmonitor.util.AutoClearedValue;
 
 import javax.inject.Inject;
 
-public class UserWorkersFragment extends Fragment implements Injectable {
+public class UserSharesFragment extends Fragment implements Injectable {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
     private DataBindingComponent dataBindingComponent = new FragmentDataBindingComponent(this);
-    private AutoClearedValue<UserWorkersFragmentBinding> binding;
-    private AutoClearedValue<UserWorkersAdapter> adapter;
+    private AutoClearedValue<UserSharesFragmentBinding> binding;
+    private AutoClearedValue<UserSharesAdapter> adapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        UserWorkersFragmentBinding dataBinding = DataBindingUtil.inflate(inflater, R.layout.user_workers_fragment, container, false, dataBindingComponent);
+        UserSharesFragmentBinding dataBinding = DataBindingUtil.inflate(inflater, R.layout.user_shares_fragment, container, false, dataBindingComponent);
         binding = new AutoClearedValue<>(this, dataBinding);
-        UserWorkersAdapter workersAdapter = new UserWorkersAdapter(dataBindingComponent);
-        adapter = new AutoClearedValue<>(this, workersAdapter);
+        UserSharesAdapter userSharesAdapter = new UserSharesAdapter(dataBindingComponent);
+        adapter = new AutoClearedValue<>(this, userSharesAdapter);
         return dataBinding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        UserWorkersViewModel userWorkersViewModel = ViewModelProviders.of(this, viewModelFactory).get(UserWorkersViewModel.class);
-        userWorkersViewModel.getWorkers().observe(this, workersResource -> adapter.get().replace(workersResource != null ? workersResource.data : null));
+        UserSharesViewModel userSharesViewModel = ViewModelProviders.of(this, viewModelFactory).get(UserSharesViewModel.class);
+        userSharesViewModel.getShares().observe(this, sharesResource -> adapter.get().replace(sharesResource != null ? sharesResource.data : null));
         UserViewModel userViewModel = ViewModelProviders.of(getActivity(), viewModelFactory).get(UserViewModel.class);
         userViewModel.getUser().observe(this, userResource -> {
             if (userResource != null && userResource.data != null) {
-                userWorkersViewModel.setAddress(userResource.data.getAccount());
+                userSharesViewModel.setAddress(userResource.data.getAccount());
             }
         });
-        binding.get().workerList.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
-        binding.get().workerList.setAdapter(adapter.get());
+        binding.get().shareList.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
+        binding.get().shareList.setAdapter(adapter.get());
     }
 }

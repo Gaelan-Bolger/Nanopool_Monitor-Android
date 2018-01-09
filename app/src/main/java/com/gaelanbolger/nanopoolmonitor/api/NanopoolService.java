@@ -3,6 +3,7 @@ package com.gaelanbolger.nanopoolmonitor.api;
 import android.arch.lifecycle.LiveData;
 
 import com.gaelanbolger.nanopoolmonitor.vo.Payment;
+import com.gaelanbolger.nanopoolmonitor.vo.Share;
 import com.gaelanbolger.nanopoolmonitor.vo.User;
 import com.gaelanbolger.nanopoolmonitor.vo.Worker;
 
@@ -28,6 +29,6 @@ public interface NanopoolService {
     @GET("v1/eth/payments/{address}")
     LiveData<ApiResponse<NanopoolResponse<List<Payment>>>> getPayments(@Path("address") String address);
 
-    // TODO share rates
-    // TODO remove ApiResponse
+    @GET("v1/eth/shareratehistory/{address}")
+    LiveData<ApiResponse<NanopoolResponse<List<Share>>>> getShares(@Path("address") String address);
 }

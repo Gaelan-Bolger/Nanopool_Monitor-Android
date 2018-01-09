@@ -10,15 +10,17 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Objects;
 
-@Entity(tableName = "worker", primaryKeys = {"id", "uid"})
+@Entity(tableName = "worker", primaryKeys = {"address", "id"})
 public class Worker {
 
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT, collate = ColumnInfo.NOCASE)
+    @SerializedName("address")
+    @NonNull
+    private String address;
     @SerializedName("id")
     @NonNull
     private String id;
-    @ColumnInfo(typeAffinity = ColumnInfo.TEXT, collate = ColumnInfo.NOCASE)
     @SerializedName("uid")
-    @NonNull
     private String uid;
     @SerializedName("hashrate")
     private String hashrate;
@@ -39,10 +41,11 @@ public class Worker {
 
     @Ignore
     public Worker() {
-        this("", "", null, 0, 0, null, null, null, null, null);
+        this("", "", "", null, 0, 0, null, null, null, null, null);
     }
 
-    public Worker(@NonNull String id, @NonNull String uid, String hashrate, long lastshare, long rating, String h1, String h3, String h6, String h12, String h24) {
+    public Worker(@NonNull String address, @NonNull String id, String uid, String hashrate, long lastshare, long rating, String h1, String h3, String h6, String h12, String h24) {
+        this.address = address;
         this.id = id;
         this.uid = uid;
         this.hashrate = hashrate;
@@ -56,6 +59,15 @@ public class Worker {
     }
 
     @NonNull
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(@NonNull String address) {
+        this.address = address;
+    }
+
+    @NonNull
     public String getId() {
         return id;
     }
@@ -64,12 +76,11 @@ public class Worker {
         this.id = id;
     }
 
-    @NonNull
     public String getUid() {
         return uid;
     }
 
-    public void setUid(@NonNull String uid) {
+    public void setUid(String uid) {
         this.uid = uid;
     }
 
@@ -142,18 +153,20 @@ public class Worker {
         if (this == o) return true;
         if (!(o instanceof Worker)) return false;
         Worker worker = (Worker) o;
-        return Objects.equals(id, worker.id) &&
+        return Objects.equals(address, worker.address) &&
+                Objects.equals(id, worker.id) &&
                 Objects.equals(uid, worker.uid);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, uid);
+        return Objects.hash(address, id, uid);
     }
 
     @Override
     public String toString() {
         return "Worker{" +
+                "address='" + address + '\'' +
                 "id='" + id + '\'' +
                 ", uid='" + uid + '\'' +
                 ", hashrate='" + hashrate + '\'' +

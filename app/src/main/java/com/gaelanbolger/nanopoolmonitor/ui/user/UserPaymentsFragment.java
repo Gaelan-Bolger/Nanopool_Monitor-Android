@@ -15,43 +15,44 @@ import android.view.ViewGroup;
 
 import com.gaelanbolger.nanopoolmonitor.R;
 import com.gaelanbolger.nanopoolmonitor.binding.FragmentDataBindingComponent;
-import com.gaelanbolger.nanopoolmonitor.databinding.UserWorkersFragmentBinding;
+import com.gaelanbolger.nanopoolmonitor.databinding.UserPaymentsFragmentBinding;
 import com.gaelanbolger.nanopoolmonitor.di.Injectable;
 import com.gaelanbolger.nanopoolmonitor.util.AutoClearedValue;
 
 import javax.inject.Inject;
 
-public class UserWorkersFragment extends Fragment implements Injectable {
+
+public class UserPaymentsFragment extends Fragment implements Injectable {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
     private DataBindingComponent dataBindingComponent = new FragmentDataBindingComponent(this);
-    private AutoClearedValue<UserWorkersFragmentBinding> binding;
-    private AutoClearedValue<UserWorkersAdapter> adapter;
+    private AutoClearedValue<UserPaymentsFragmentBinding> binding;
+    private AutoClearedValue<UserPaymentsAdapter> adapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        UserWorkersFragmentBinding dataBinding = DataBindingUtil.inflate(inflater, R.layout.user_workers_fragment, container, false, dataBindingComponent);
+        UserPaymentsFragmentBinding dataBinding = DataBindingUtil.inflate(inflater, R.layout.user_payments_fragment, container, false, dataBindingComponent);
         binding = new AutoClearedValue<>(this, dataBinding);
-        UserWorkersAdapter workersAdapter = new UserWorkersAdapter(dataBindingComponent);
-        adapter = new AutoClearedValue<>(this, workersAdapter);
+        UserPaymentsAdapter userPaymentsAdapter = new UserPaymentsAdapter(dataBindingComponent);
+        adapter = new AutoClearedValue<>(this, userPaymentsAdapter);
         return dataBinding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        UserWorkersViewModel userWorkersViewModel = ViewModelProviders.of(this, viewModelFactory).get(UserWorkersViewModel.class);
-        userWorkersViewModel.getWorkers().observe(this, workersResource -> adapter.get().replace(workersResource != null ? workersResource.data : null));
+        UserPaymentsViewModel userPaymentsViewModel = ViewModelProviders.of(this, viewModelFactory).get(UserPaymentsViewModel.class);
+        userPaymentsViewModel.getPayments().observe(this, paymentsResource -> adapter.get().replace(paymentsResource != null ? paymentsResource.data : null));
         UserViewModel userViewModel = ViewModelProviders.of(getActivity(), viewModelFactory).get(UserViewModel.class);
         userViewModel.getUser().observe(this, userResource -> {
             if (userResource != null && userResource.data != null) {
-                userWorkersViewModel.setAddress(userResource.data.getAccount());
+                userPaymentsViewModel.setAddress(userResource.data.getAccount());
             }
         });
-        binding.get().workerList.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
-        binding.get().workerList.setAdapter(adapter.get());
+        binding.get().paymentList.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
+        binding.get().paymentList.setAdapter(adapter.get());
     }
 }

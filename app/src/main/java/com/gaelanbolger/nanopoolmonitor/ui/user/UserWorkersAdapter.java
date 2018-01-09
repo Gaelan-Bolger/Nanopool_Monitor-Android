@@ -33,7 +33,7 @@ public class UserWorkersAdapter extends DataBoundListAdapter<Worker, WorkerItemB
 
     @Override
     protected boolean areItemsTheSame(Worker oldItem, Worker newItem) {
-        return areContentsTheSame(oldItem, newItem);
+        return Objects.equals(oldItem, newItem);
     }
 
     @Override

@@ -3,20 +3,16 @@ package com.gaelanbolger.nanopoolmonitor.repository;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.WorkerThread;
 
 import com.gaelanbolger.nanopoolmonitor.AppExecutors;
 import com.gaelanbolger.nanopoolmonitor.api.ApiResponse;
 import com.gaelanbolger.nanopoolmonitor.api.NanopoolResponse;
 import com.gaelanbolger.nanopoolmonitor.api.NanopoolService;
 import com.gaelanbolger.nanopoolmonitor.db.UserDao;
-import com.gaelanbolger.nanopoolmonitor.db.WorkerDao;
 import com.gaelanbolger.nanopoolmonitor.util.RateLimiter;
 import com.gaelanbolger.nanopoolmonitor.vo.Resource;
 import com.gaelanbolger.nanopoolmonitor.vo.User;
-import com.gaelanbolger.nanopoolmonitor.vo.Worker;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -32,14 +28,12 @@ public class UserRepository {
 
     private AppExecutors appExecutors;
     private UserDao userDao;
-    private WorkerDao workerDao;
     private NanopoolService nanopoolService;
 
     @Inject
-    public UserRepository(AppExecutors appExecutors, UserDao userDao, WorkerDao workerDao, NanopoolService nanopoolService) {
+    public UserRepository(AppExecutors appExecutors, UserDao userDao, NanopoolService nanopoolService) {
         this.appExecutors = appExecutors;
         this.userDao = userDao;
-        this.workerDao = workerDao;
         this.nanopoolService = nanopoolService;
     }
 
@@ -51,7 +45,6 @@ public class UserRepository {
                 User user = item.getData();
                 if (user != null) {
                     userDao.insert(user);
-                    insertUserWorkers(user);
                 }
             }
 
@@ -72,19 +65,5 @@ public class UserRepository {
                 return nanopoolService.getUser(address);
             }
         }.asLiveData();
-    }
-
-    @WorkerThread
-    private void insertUserWorkers(User user) {
-        List<Worker> workers = user.getWorkers();
-        for (Worker worker : workers) {
-            worker.setUid(user.getAccount());
-        }
-        List<Worker> existing = workerDao.getByAddress(user.getAccount());
-        existing.removeAll(workers);
-        if (!existing.isEmpty()) {
-            workerDao.deleteAll(existing.toArray(new Worker[existing.size()]));
-        }
-        workerDao.insertAll(workers.toArray(new Worker[workers.size()]));
     }
 }

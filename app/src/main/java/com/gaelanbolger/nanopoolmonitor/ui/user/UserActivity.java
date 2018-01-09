@@ -64,13 +64,11 @@ public class UserActivity extends AppCompatActivity implements HasSupportFragmen
         }
 
         binding = DataBindingUtil.setContentView(this, R.layout.user_activity);
-        binding.setAddress(address);
-
         setSupportActionBar(binding.toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setDisplayShowHomeEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
         }
     }
 
@@ -81,8 +79,10 @@ public class UserActivity extends AppCompatActivity implements HasSupportFragmen
         userViewModel.setAddress(address);
         userViewModel.getUser().observe(this, userResource -> {
             binding.setUser(userResource != null ? userResource.data : null);
+            binding.setUserResource(userResource);
             binding.executePendingBindings();
         });
+        binding.setRetryCallback(() -> userViewModel.retry());
         binding.pager.setAdapter(new UserFragmentPagerAdapter(getSupportFragmentManager()));
         binding.tabs.setupWithViewPager(binding.pager);
     }
@@ -125,6 +125,12 @@ public class UserActivity extends AppCompatActivity implements HasSupportFragmen
                     case 0:
                         f = new UserWorkersFragment();
                         break;
+                    case 1:
+                        f = new UserPaymentsFragment();
+                        break;
+                    case 2:
+                        f = new UserSharesFragment();
+                        break;
                     default:
                         f = DummyFragment.create(position);
                         break;
@@ -142,8 +148,13 @@ public class UserActivity extends AppCompatActivity implements HasSupportFragmen
         @Nullable
         @Override
         public CharSequence getPageTitle(int position) {
-            if (getItem(position) instanceof UserWorkersFragment)
+            Fragment page = getItem(position);
+            if (page instanceof UserWorkersFragment)
                 return "Workers";
+            else if (page instanceof UserPaymentsFragment)
+                return "Payments";
+            else if (page instanceof UserSharesFragment)
+                return "Shares";
             return "Page " + (position + 1);
         }
     }

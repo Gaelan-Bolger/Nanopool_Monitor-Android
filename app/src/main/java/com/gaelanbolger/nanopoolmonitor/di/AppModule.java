@@ -7,6 +7,8 @@ import android.preference.PreferenceManager;
 
 import com.gaelanbolger.nanopoolmonitor.db.AccountDao;
 import com.gaelanbolger.nanopoolmonitor.db.NanopoolMonitorDatabase;
+import com.gaelanbolger.nanopoolmonitor.db.PaymentDao;
+import com.gaelanbolger.nanopoolmonitor.db.ShareDao;
 import com.gaelanbolger.nanopoolmonitor.db.UserDao;
 import com.gaelanbolger.nanopoolmonitor.db.WorkerDao;
 
@@ -51,5 +53,17 @@ class AppModule {
     @Singleton
     WorkerDao provideWorkerDao(NanopoolMonitorDatabase database) {
         return database.workerDao();
+    }
+
+    @Provides
+    @Singleton
+    PaymentDao providePaymentDao(NanopoolMonitorDatabase database) {
+        return database.paymentDao();
+    }
+
+    @Provides
+    @Singleton
+    ShareDao provideShareDao(NanopoolMonitorDatabase database) {
+        return database.shareDao();
     }
 }

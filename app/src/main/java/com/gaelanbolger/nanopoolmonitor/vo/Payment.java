@@ -1,21 +1,24 @@
 
 package com.gaelanbolger.nanopoolmonitor.vo;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Objects;
 
-@Entity(tableName = "payment")
+@Entity(tableName = "payment", primaryKeys = {"address", "txHash"})
 public class Payment {
 
-    @PrimaryKey(autoGenerate = true)
-    @SerializedName("id")
-    private long id;
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT, collate = ColumnInfo.NOCASE)
+    @SerializedName("address")
+    @NonNull
+    private String address;
     @SerializedName("txHash")
+    @NonNull
     private String txHash;
     @SerializedName("date")
     private long date;
@@ -26,30 +29,32 @@ public class Payment {
 
     @Ignore
     public Payment() {
-        this(0, "", 0, 0, false);
+        this("", "", 0, 0, false);
     }
 
-    public Payment(long id, String txHash, long date, double amount, boolean confirmed) {
-        this.id = id;
+    public Payment(@NonNull String address, @NonNull String txHash, long date, double amount, boolean confirmed) {
+        this.address = address;
         this.txHash = txHash;
         this.date = date;
         this.amount = amount;
         this.confirmed = confirmed;
     }
 
-    public long getId() {
-        return id;
+    @NonNull
+    public String getAddress() {
+        return address;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setAddress(@NonNull String address) {
+        this.address = address;
     }
 
+    @NonNull
     public String getTxHash() {
         return txHash;
     }
 
-    public void setTxHash(String txHash) {
+    public void setTxHash(@NonNull String txHash) {
         this.txHash = txHash;
     }
 
@@ -69,7 +74,7 @@ public class Payment {
         this.amount = amount;
     }
 
-    public boolean getConfirmed() {
+    public boolean isConfirmed() {
         return confirmed;
     }
 
@@ -81,15 +86,24 @@ public class Payment {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Payment)) return false;
-        Payment worker = (Payment) o;
-        return Objects.equals(id, worker.id)
-                && Objects.equals(txHash, worker.txHash);
+        Payment payment = (Payment) o;
+        return Objects.equals(address, payment.address)
+                && Objects.equals(txHash, payment.txHash);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, txHash);
+        return Objects.hash(address, txHash);
     }
 
-
+    @Override
+    public String toString() {
+        return "Payment{" +
+                "address='" + address + '\'' +
+                ", txHash='" + txHash + '\'' +
+                ", date=" + date +
+                ", amount=" + amount +
+                ", confirmed=" + confirmed +
+                '}';
+    }
 }

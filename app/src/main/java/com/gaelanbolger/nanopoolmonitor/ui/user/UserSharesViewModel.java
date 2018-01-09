@@ -1,33 +1,33 @@
 package com.gaelanbolger.nanopoolmonitor.ui.user;
 
-
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 
-import com.gaelanbolger.nanopoolmonitor.repository.UserRepository;
+import com.gaelanbolger.nanopoolmonitor.repository.ShareRepository;
 import com.gaelanbolger.nanopoolmonitor.util.AbsentLiveData;
 import com.gaelanbolger.nanopoolmonitor.vo.Resource;
-import com.gaelanbolger.nanopoolmonitor.vo.User;
+import com.gaelanbolger.nanopoolmonitor.vo.Share;
 
+import java.util.List;
 import java.util.Objects;
 
 import javax.inject.Inject;
 
-public class UserViewModel extends ViewModel {
+public class UserSharesViewModel extends ViewModel {
 
     private MutableLiveData<String> address = new MutableLiveData<>();
 
-    private final LiveData<Resource<User>> user;
+    private final LiveData<Resource<List<Share>>> shares;
 
     @Inject
-    public UserViewModel(UserRepository userRepository) {
-        user = Transformations.switchMap(address, address -> {
+    public UserSharesViewModel(ShareRepository shareRepository) {
+        shares = Transformations.switchMap(address, address -> {
             if (address == null) {
                 return AbsentLiveData.create();
             } else {
-                return userRepository.loadUser(address);
+                return shareRepository.findByAddress(address);
             }
         });
     }
@@ -39,8 +39,8 @@ public class UserViewModel extends ViewModel {
         this.address.setValue(address);
     }
 
-    public LiveData<Resource<User>> getUser() {
-        return user;
+    public LiveData<Resource<List<Share>>> getShares() {
+        return shares;
     }
 
     public void retry() {
