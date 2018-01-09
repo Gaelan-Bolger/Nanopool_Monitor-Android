@@ -42,7 +42,7 @@ public class PaymentRepository {
                     for (Payment payment : payments) {
                         payment.setAddress(address);
                     }
-                    paymentDao.insertAll(payments.toArray(new Payment[payments.size()]));
+                    insertAll(payments.toArray(new Payment[payments.size()]));
                 }
             }
 
@@ -63,5 +63,17 @@ public class PaymentRepository {
                 return nanopoolService.getPayments(address);
             }
         }.asLiveData();
+    }
+
+    private void insertAll(Payment... payments) {
+        appExecutors.diskIO().execute(() -> paymentDao.insertAll(payments));
+    }
+
+    private void deleteAll(Payment... payments) {
+        appExecutors.diskIO().execute(() -> paymentDao.deleteAll(payments));
+    }
+
+    public void deleteAll(String address) {
+        appExecutors.diskIO().execute(() -> paymentDao.deleteAll(address));
     }
 }

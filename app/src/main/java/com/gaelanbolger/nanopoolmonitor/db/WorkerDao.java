@@ -14,18 +14,15 @@ import java.util.List;
 @Dao
 public interface WorkerDao {
 
-    @Query("SELECT * FROM worker WHERE address = :address")
-    LiveData<List<Worker>> findByAddress(String address);
-
-    @Query("SELECT * FROM worker WHERE address = :address")
-    List<Worker> getByAddress(String address);
-
-    @Query("DELETE FROM worker WHERE address = :address")
-    void deleteAll(String address);
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertAll(Worker... worker);
 
     @Delete
     void deleteAll(Worker... workers);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(Worker... worker);
+    @Query("DELETE FROM worker WHERE address = :address")
+    void deleteAll(String address);
+
+    @Query("SELECT * FROM worker WHERE address = :address")
+    LiveData<List<Worker>> findByAddress(String address);
 }

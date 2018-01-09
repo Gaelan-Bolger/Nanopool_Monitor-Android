@@ -44,7 +44,7 @@ public class UserRepository {
             protected void saveCallResult(@NonNull NanopoolResponse<User> item) {
                 User user = item.getData();
                 if (user != null) {
-                    userDao.insert(user);
+                    insertUser(user);
                 }
             }
 
@@ -65,5 +65,17 @@ public class UserRepository {
                 return nanopoolService.getUser(address);
             }
         }.asLiveData();
+    }
+
+    public void insertUser(User user) {
+        appExecutors.diskIO().execute(() -> userDao.insert(user));
+    }
+
+    public void deleteUser(User user) {
+        appExecutors.diskIO().execute(() -> userDao.delete(user));
+    }
+
+    public void deleteUser(String address) {
+        appExecutors.diskIO().execute(() -> userDao.delete(address));
     }
 }

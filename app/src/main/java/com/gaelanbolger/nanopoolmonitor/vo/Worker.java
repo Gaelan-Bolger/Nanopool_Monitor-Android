@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Objects;
 
-@Entity(tableName = "worker", primaryKeys = {"address", "id"})
+@Entity(tableName = "worker", primaryKeys = {"address", "id", "uid"})
 public class Worker {
 
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT, collate = ColumnInfo.NOCASE)
@@ -21,6 +21,7 @@ public class Worker {
     @NonNull
     private String id;
     @SerializedName("uid")
+    @NonNull
     private String uid;
     @SerializedName("hashrate")
     private String hashrate;
@@ -28,34 +29,19 @@ public class Worker {
     private long lastshare;
     @SerializedName("rating")
     private long rating;
-    @SerializedName("h1")
-    private String h1;
-    @SerializedName("h3")
-    private String h3;
-    @SerializedName("h6")
-    private String h6;
-    @SerializedName("h12")
-    private String h12;
-    @SerializedName("h24")
-    private String h24;
 
     @Ignore
     public Worker() {
-        this("", "", "", null, 0, 0, null, null, null, null, null);
+        this("", "", "", null, 0, 0);
     }
 
-    public Worker(@NonNull String address, @NonNull String id, String uid, String hashrate, long lastshare, long rating, String h1, String h3, String h6, String h12, String h24) {
+    public Worker(@NonNull String address, @NonNull String id, @NonNull String uid, String hashrate, long lastshare, long rating) {
         this.address = address;
         this.id = id;
         this.uid = uid;
         this.hashrate = hashrate;
         this.lastshare = lastshare;
         this.rating = rating;
-        this.h1 = h1;
-        this.h3 = h3;
-        this.h6 = h6;
-        this.h12 = h12;
-        this.h24 = h24;
     }
 
     @NonNull
@@ -76,11 +62,12 @@ public class Worker {
         this.id = id;
     }
 
+    @NonNull
     public String getUid() {
         return uid;
     }
 
-    public void setUid(String uid) {
+    public void setUid(@NonNull String uid) {
         this.uid = uid;
     }
 
@@ -108,46 +95,6 @@ public class Worker {
         this.rating = rating;
     }
 
-    public String getH1() {
-        return h1;
-    }
-
-    public void setH1(String h1) {
-        this.h1 = h1;
-    }
-
-    public String getH3() {
-        return h3;
-    }
-
-    public void setH3(String h3) {
-        this.h3 = h3;
-    }
-
-    public String getH6() {
-        return h6;
-    }
-
-    public void setH6(String h6) {
-        this.h6 = h6;
-    }
-
-    public String getH12() {
-        return h12;
-    }
-
-    public void setH12(String h12) {
-        this.h12 = h12;
-    }
-
-    public String getH24() {
-        return h24;
-    }
-
-    public void setH24(String h24) {
-        this.h24 = h24;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -168,15 +115,10 @@ public class Worker {
         return "Worker{" +
                 "address='" + address + '\'' +
                 "id='" + id + '\'' +
-                ", uid='" + uid + '\'' +
+                "uid='" + uid + '\'' +
                 ", hashrate='" + hashrate + '\'' +
                 ", lastshare=" + lastshare +
                 ", rating=" + rating +
-                ", h1='" + h1 + '\'' +
-                ", h3='" + h3 + '\'' +
-                ", h6='" + h6 + '\'' +
-                ", h12='" + h12 + '\'' +
-                ", h24='" + h24 + '\'' +
                 '}';
     }
 }

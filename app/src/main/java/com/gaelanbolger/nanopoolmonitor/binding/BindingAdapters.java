@@ -1,6 +1,7 @@
 package com.gaelanbolger.nanopoolmonitor.binding;
 
 import android.databinding.BindingAdapter;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -18,7 +19,12 @@ public class BindingAdapters {
     }
 
     @BindingAdapter("dateTime")
-    public static void setPaymentDateText(TextView view, long millis) {
+    public static void setDateTimeText(TextView view, long millis) {
         view.setText(SimpleDateFormat.getDateTimeInstance().format(new Date(millis)));
+    }
+
+    @BindingAdapter("timeAgo")
+    public static void setTimeAgoText(TextView view, long millis) {
+        view.setText(DateUtils.getRelativeTimeSpanString(millis, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS));
     }
 }

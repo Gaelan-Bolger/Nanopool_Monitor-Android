@@ -58,6 +58,7 @@ public class NewAccountFragment extends Fragment implements Injectable {
             @Override
             public void onRetrieved(Barcode barcode) {
                 Timber.d("onRetrieved: " + barcode);
+                AndroidUtils.vibrate(getActivity(), 150);
                 AndroidUtils.runOnUiThread(() -> {
                     accountNavigationController.popBackStack();
                     accountNavigationController.navigateToAccount(barcode.displayValue.contains(":")

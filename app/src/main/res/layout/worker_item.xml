@@ -5,8 +5,6 @@
 
     <data>
 
-        <import type="com.gaelanbolger.nanopoolmonitor.util.DateUtils" />
-
         <variable
             name="number"
             type="Integer" />
@@ -61,8 +59,8 @@
                 android:id="@+id/worker_lastshare"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{DateUtils.timeAgo(worker.lastshare * 1000)}"
                 android:textAppearance="?android:attr/textAppearanceSmall"
+                app:timeAgo="@{worker.lastshare * 1000}"
                 tools:text="17 minutes ago" />
         </LinearLayout>
 

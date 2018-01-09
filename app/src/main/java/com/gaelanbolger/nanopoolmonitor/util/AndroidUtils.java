@@ -18,6 +18,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.customtabs.CustomTabsIntent;
 import android.util.Log;
@@ -32,6 +34,8 @@ import com.gaelanbolger.nanopoolmonitor.R;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import static android.os.VibrationEffect.createOneShot;
 
 public class AndroidUtils {
 
@@ -197,6 +201,18 @@ public class AndroidUtils {
         }
     }
 
+    public static void vibrate(Context context, int millis) {
+        Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        if (vibrator != null && vibrator.hasVibrator()) {
+            if (isOreo()) {
+                VibrationEffect vibe = createOneShot(millis, VibrationEffect.DEFAULT_AMPLITUDE);
+                vibrator.vibrate(vibe);
+            } else {
+                vibrator.vibrate(millis);
+            }
+        }
+    }
+
     public interface OnMeasuredCallback {
         /**
          * Called when the layout is done.
@@ -326,6 +342,10 @@ public class AndroidUtils {
 
     public static boolean isLollipop() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
+    }
+
+    public static boolean isOreo() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
     }
 
     public static void setElevation(View view, float elevation) {

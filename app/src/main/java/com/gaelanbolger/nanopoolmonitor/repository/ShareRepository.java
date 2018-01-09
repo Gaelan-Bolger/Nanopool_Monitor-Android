@@ -48,7 +48,7 @@ public class ShareRepository {
                     for (Share share : shares) {
                         share.setAddress(address);
                     }
-                    shareDao.insertAll(shares.toArray(new Share[shares.size()]));
+                    insertAll(shares.toArray(new Share[shares.size()]));
                 }
             }
 
@@ -69,5 +69,17 @@ public class ShareRepository {
                 return nanopoolService.getShares(address);
             }
         }.asLiveData();
+    }
+
+    public void insertAll(Share... shares) {
+        appExecutors.diskIO().execute(() -> shareDao.insertAll(shares));
+    }
+
+    public void deleteAll(Share... shares) {
+        appExecutors.diskIO().execute(() -> shareDao.deleteAll(shares));
+    }
+
+    public void deleteAll(String address) {
+        appExecutors.diskIO().execute(() -> shareDao.deleteAll(address));
     }
 }
