@@ -1,5 +1,6 @@
 package com.gaelanbolger.nanopoolmonitor.ui.user;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -22,8 +23,15 @@ import android.widget.TextView;
 
 import com.gaelanbolger.nanopoolmonitor.R;
 import com.gaelanbolger.nanopoolmonitor.databinding.UserActivityBinding;
+import com.gaelanbolger.nanopoolmonitor.vo.Resource;
+import com.gaelanbolger.nanopoolmonitor.vo.Share;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -64,6 +72,8 @@ public class UserActivity extends AppCompatActivity implements HasSupportFragmen
         }
 
         binding = DataBindingUtil.setContentView(this, R.layout.user_activity);
+        binding.setAddress(address);
+
         setSupportActionBar(binding.toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -82,6 +92,41 @@ public class UserActivity extends AppCompatActivity implements HasSupportFragmen
             binding.setUserResource(userResource);
             binding.executePendingBindings();
         });
+        userViewModel.getChartData().observe(this, new Observer<Resource<List<Share>>>() {
+            @Override
+            public void onChanged(@Nullable Resource<List<Share>> sharesResource) {
+                if (sharesResource != null) {
+                    List<Share> shares;
+                    if ((shares = sharesResource.data) != null && shares.size() > 0) {
+                        List<Entry> entries = new ArrayList<>(50);
+                        for (int i = 0; i < shares.size() && i < 50; i++) {
+                            entries.add(new Entry(i, shares.get(i).getShares()));
+                        }
+                        LineDataSet lineDataSet = new LineDataSet(entries, "Shares");
+                        lineDataSet.setDrawCircles(false);
+                        lineDataSet.setDrawValues(false);
+                        lineDataSet.setColor(Color.WHITE);
+                        lineDataSet.setLineWidth(1f);
+                        if (binding.chart.getData() == null)
+                            binding.chart.animateX(1500);
+                        binding.chart.setData(new LineData(lineDataSet));
+                        binding.chart.invalidate();
+                    }
+                }
+            }
+        });
+        binding.chart.setTouchEnabled(false);
+        binding.chart.setScaleEnabled(false);
+        binding.chart.setDrawBorders(false);
+        binding.chart.setDrawGridBackground(false);
+        binding.chart.getDescription().setEnabled(false);
+        binding.chart.getLegend().setEnabled(false);
+        binding.chart.getXAxis().setEnabled(false);
+        binding.chart.getAxisRight().setEnabled(false);
+        binding.chart.getAxisLeft().setDrawAxisLine(false);
+        binding.chart.getAxisLeft().setDrawGridLines(false);
+        binding.chart.getAxisLeft().setTextColor(Color.WHITE);
+        binding.chart.getAxisLeft().setLabelCount(1, true);
         binding.setRetryCallback(() -> userViewModel.retry());
         binding.pager.setAdapter(new UserFragmentPagerAdapter(getSupportFragmentManager()));
         binding.tabs.setupWithViewPager(binding.pager);

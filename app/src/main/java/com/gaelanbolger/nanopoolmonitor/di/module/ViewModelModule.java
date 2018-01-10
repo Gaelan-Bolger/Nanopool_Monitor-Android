@@ -1,8 +1,9 @@
-package com.gaelanbolger.nanopoolmonitor.di;
+package com.gaelanbolger.nanopoolmonitor.di.module;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
+import com.gaelanbolger.nanopoolmonitor.di.ViewModelKey;
 import com.gaelanbolger.nanopoolmonitor.ui.account.AccountViewModel;
 import com.gaelanbolger.nanopoolmonitor.ui.user.UserPaymentsViewModel;
 import com.gaelanbolger.nanopoolmonitor.ui.user.UserSharesViewModel;
@@ -15,7 +16,7 @@ import dagger.Module;
 import dagger.multibindings.IntoMap;
 
 @Module
-abstract class ViewModelModule {
+public abstract class ViewModelModule {
 
     @Binds
     @IntoMap

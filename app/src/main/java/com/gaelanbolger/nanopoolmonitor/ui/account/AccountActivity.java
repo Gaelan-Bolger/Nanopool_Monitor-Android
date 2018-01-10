@@ -26,7 +26,6 @@ public class AccountActivity extends AppCompatActivity implements HasSupportFrag
         super.onCreate(savedInstanceState);
         AccountActivityBinding dataBinding = DataBindingUtil.setContentView(this, R.layout.account_activity);
         setSupportActionBar(dataBinding.toolbar);
-
         if (savedInstanceState == null) {
             navigationController.navigateToAccount(null);
         }

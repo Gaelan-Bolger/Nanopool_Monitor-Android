@@ -9,6 +9,10 @@
         <import type="com.gaelanbolger.nanopoolmonitor.vo.Status" />
 
         <variable
+            name="address"
+            type="String" />
+
+        <variable
             name="user"
             type="com.gaelanbolger.nanopoolmonitor.vo.User" />
 
@@ -39,8 +43,8 @@
                 app:contentScrim="?attr/colorPrimary"
                 app:expandedSubtitleTextAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:subtitle="@{user.account}"
-                app:title="@{@string/worker_balance(String.valueOf(user.balance))}">
+                app:subtitle="@{address}"
+                app:title="@{@string/worker_balance(String.valueOf(user.balance ?? `-`))}">
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbar"
@@ -50,6 +54,11 @@
                     app:layout_collapseMode="pin"
                     app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
             </android.support.design.widget.SubtitleCollapsingToolbarLayout>
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chart"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize" />
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/tabs"

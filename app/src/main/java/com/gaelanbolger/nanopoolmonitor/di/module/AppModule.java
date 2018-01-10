@@ -1,4 +1,4 @@
-package com.gaelanbolger.nanopoolmonitor.di;
+package com.gaelanbolger.nanopoolmonitor.di.module;
 
 import android.app.Application;
 import android.arch.persistence.room.Room;
@@ -18,7 +18,7 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module(includes = ViewModelModule.class)
-class AppModule {
+public class AppModule {
 
     public AppModule() {
     }

@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
 import com.gaelanbolger.nanopoolmonitor.NanopoolMonitorApplication;
+import com.gaelanbolger.nanopoolmonitor.di.component.DaggerAppComponent;
 
 import dagger.android.AndroidInjection;
 import dagger.android.support.AndroidSupportInjection;

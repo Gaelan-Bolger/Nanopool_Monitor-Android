@@ -13,7 +13,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,7 +78,6 @@ public class AccountFragment extends Fragment implements Injectable {
         super.onActivityCreated(savedInstanceState);
         AccountAdapter accountAdapter = new AccountAdapter(dataBindingComponent,
                 account -> {
-//                    accountNavigationController.navigateToUser(account.getAddress());
                     UserActivity.start(getActivity(), account.getAddress());
                 }
         );
@@ -106,12 +107,6 @@ public class AccountFragment extends Fragment implements Injectable {
                 new DividerItemDecoration(binding.get().accountList.getContext(), DividerItemDecoration.VERTICAL)
         );
         binding.get().newAccount.setOnClickListener(this::onNewAccount);
-        binding.get().submit.setOnClickListener(this::onAddAccount);
-        if (getArguments() != null && getArguments().containsKey(KEY_ADDRESS)) {
-            String address = getArguments().getString(KEY_ADDRESS, "");
-            binding.get().input.setText(address);
-            binding.get().input.setSelection(address.length());
-        }
         binding.get().input.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 onAddAccount(v);
@@ -126,6 +121,27 @@ public class AccountFragment extends Fragment implements Injectable {
             }
             return false;
         });
+        binding.get().input.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                binding.get().submit.setEnabled(binding.get().input.getText().length() > 0);
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        binding.get().submit.setEnabled(false);
+        binding.get().submit.setOnClickListener(this::onAddAccount);
+        if (getArguments() != null && getArguments().containsKey(KEY_ADDRESS)) {
+            String address = getArguments().getString(KEY_ADDRESS, "");
+            binding.get().input.setText(address);
+            binding.get().input.setSelection(address.length());
+        }
     }
 
     private void onNewAccount(View v) {

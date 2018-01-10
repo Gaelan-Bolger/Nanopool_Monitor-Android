@@ -3,16 +3,21 @@ package com.gaelanbolger.nanopoolmonitor.api;
 import android.arch.lifecycle.LiveData;
 
 import com.gaelanbolger.nanopoolmonitor.vo.Payment;
+import com.gaelanbolger.nanopoolmonitor.vo.Prices;
 import com.gaelanbolger.nanopoolmonitor.vo.Share;
 import com.gaelanbolger.nanopoolmonitor.vo.User;
 import com.gaelanbolger.nanopoolmonitor.vo.Worker;
 
 import java.util.List;
 
+import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 public interface NanopoolService {
+
+    @GET("v1/eth/prices")
+    Call<NanopoolResponse<Prices>> getPrices();
 
     @GET("v1/eth/accountexist/{address}")
     LiveData<ApiResponse<NanopoolResponse<Boolean>>> accountExist(@Path("address") String address);

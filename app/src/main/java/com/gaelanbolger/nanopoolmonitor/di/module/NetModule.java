@@ -1,4 +1,4 @@
-package com.gaelanbolger.nanopoolmonitor.di;
+package com.gaelanbolger.nanopoolmonitor.di.module;
 
 import android.app.Application;
 
